@@ -1,1 +1,1 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>!!encrypted_data!!</body><script>let encrypted_data=document.body.innerText;document.body.innerText= decodeURI(encrypted_data.replaceAll("&","%"));</script></html>
+<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>!!encrypted_data!!</body><script>let encrypted_data=document.body.innerText;document.body.innerText= decodeURIComponent(encrypted_data.replaceAll("&","%"));</script></html>

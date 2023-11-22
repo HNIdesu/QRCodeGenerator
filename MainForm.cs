@@ -1,11 +1,7 @@
+using PCLWebUtility;
 using QRCodeGenerator.Properties;
 using QRCoder;
-using System.Buffers.Text;
-using System.Net;
-using System.Security.Policy;
 using System.Text;
-using System.Text.Encodings.Web;
-using System.Text.RegularExpressions;
 
 namespace QRCodeGenerator
 {

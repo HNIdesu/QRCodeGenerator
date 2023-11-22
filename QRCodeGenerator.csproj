@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="PCLWebUtility" Version="1.0.3" />
     <PackageReference Include="QRCoder" Version="1.4.3" />
   </ItemGroup>
 
