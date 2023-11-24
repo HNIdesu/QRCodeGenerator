@@ -8,7 +8,7 @@ namespace QRCodeGenerator
     public partial class MainForm : Form
     {
         private ContentProvider ContentProvider = new ContentProvider();
-        private static readonly string ExternalUrl = "http://dummy.net/";
+        private static readonly string ExternalUrl = "https://dummy.net";
 
         public MainForm()
         {

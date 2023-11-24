@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using WatsonWebserver.Core;
+using WatsonWebserver.Lite;
 
 namespace QRCodeGenerator
 {
@@ -11,39 +12,33 @@ namespace QRCodeGenerator
 
         public void Start()
         {
-            HttpListener listener = new HttpListener();
-            listener.Prefixes.Add("http://192.168.1.2:2321/");
+            WebserverSettings settings = new WebserverSettings("192.168.1.2", 2321);
+            WebserverLite listener = new WebserverLite(settings,OnGetContext);
             listener.Start();
-            listener.BeginGetContext(OnGetContext, listener);
         }
 
-        private void OnGetContext(IAsyncResult asyncResult)
+        private async Task OnGetContext(HttpContextBase  context)
         {
-            HttpListener? listener = asyncResult.AsyncState as HttpListener;
-            if (listener == null) return;
-            var context = listener.EndGetContext(asyncResult);
-            if (MimeType == null || FuncGetData == null)
-                SendEmptyResponse(context);
+            if (FuncGetData == null || MimeType == null)
+                await SendEmptyMessage(context.Response);
             else
-                SendResponse(context, MimeType, FuncGetData.Invoke());
-            listener.BeginGetContext(OnGetContext, listener);
+                await SendMessage(context.Response,MimeType, FuncGetData.Invoke());
+            return;
         }
 
-        private void SendEmptyResponse(HttpListenerContext ctx)
+        private static async Task SendMessage(HttpResponseBase response,string mime, byte[] data)
         {
-            ctx.Response.StatusCode = 404;
-            ctx.Response.Close();
-        }
-
-        private void SendResponse(HttpListenerContext ctx,string mimeType, byte[] data)
-        {
-            var response = ctx.Response;
             response.StatusCode = 200;
-            response.ContentType = mimeType;
-            response.ContentLength64 = data.LongLength;
-            response.OutputStream.Write(data);
-            response.Close();
+            response.ContentType = mime;
+            await response.Send(data);
         }
+
+        private static async Task SendEmptyMessage(HttpResponseBase response)
+        {
+            response.StatusCode = 200;
+            await response.Send();
+        }
+
 
         public void SetData(string mime, Func<byte[]> func)
         {
