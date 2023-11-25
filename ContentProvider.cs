@@ -1,49 +1,53 @@
-﻿using WatsonWebserver.Core;
-using WatsonWebserver.Lite;
+﻿using NetCoreServer;
 
 namespace QRCodeGenerator
 {
-    internal class ContentProvider
+    internal class ContentProvider:HttpServer
     {
-        private string? MimeType { get; set; }
-        private Func<byte[]>? FuncGetData;
-
-        public ContentProvider(){}
-
-        public void Start()
+        private struct Item
         {
-            WebserverSettings settings = new WebserverSettings("192.168.1.2", 2321);
-            WebserverLite listener = new WebserverLite(settings,OnGetContext);
-            listener.Start();
+            public string Mime;
+            public Func<byte[]> _FuncGetData;
+            public Item(string mime, Func <byte[]> func)
+            {
+                Mime = mime;
+                _FuncGetData = func;
+            }
+        }
+        private Dictionary<string, Item> _TokenItemDictionary = new Dictionary<string, Item>();
+        private Dictionary<string, string> _TypeTokenDictionary = new Dictionary<string, string>();
+        private class HttpSession1 : HttpSession
+        {
+            public HttpSession1(HttpServer server) : base(server){}
+            protected override void OnReceivedRequest(HttpRequest request)
+            {
+                ContentProvider server = (ContentProvider)Server;
+                string? token = TextUtil.GetQueryValue(request.Url, "token");
+                if(token==null||!server._TokenItemDictionary.ContainsKey(token))
+                    SendResponse(Response.MakeErrorResponse(403));
+                else
+                {
+                    Item item = server._TokenItemDictionary[token];
+                    SendResponse(Response.MakeGetResponse(item._FuncGetData.Invoke(), item.Mime));
+                }
+            }
         }
 
-        private async Task OnGetContext(HttpContextBase  context)
-        {
-            if (FuncGetData == null || MimeType == null)
-                await SendEmptyMessage(context.Response);
-            else
-                await SendMessage(context.Response,MimeType, FuncGetData.Invoke());
-            return;
-        }
+        public ContentProvider(string hostName, int port) : base(hostName, port) { }
 
-        private static async Task SendMessage(HttpResponseBase response,string mime, byte[] data)
+        protected override TcpSession CreateSession() => new HttpSession1(this);
+        public string SetData(string mime, Func<byte[]> func)
         {
-            response.StatusCode = 200;
-            response.ContentType = mime;
-            await response.Send(data);
-        }
-
-        private static async Task SendEmptyMessage(HttpResponseBase response)
-        {
-            response.StatusCode = 200;
-            await response.Send();
-        }
-
-
-        public void SetData(string mime, Func<byte[]> func)
-        {
-            MimeType = mime;
-            FuncGetData = func;
+            string token = func.GetHashCode().ToString("X");
+            string majorType = mime.Substring(0, mime.IndexOf('/'));
+            if (_TypeTokenDictionary.ContainsKey(majorType))
+            {
+                _TokenItemDictionary.Remove(_TypeTokenDictionary[majorType]);
+                _TypeTokenDictionary.Remove(majorType);
+            }
+            _TypeTokenDictionary[majorType] = token;
+            _TokenItemDictionary[token] = new Item(mime, func);
+            return token;
         }
     }
 }

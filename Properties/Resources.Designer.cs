@@ -61,15 +61,11 @@ namespace QRCodeGenerator.Properties {
         }
         
         /// <summary>
-        ///   查找类似 &lt;!DOCTYPE html&gt;
-        ///&lt;html&gt;
-        ///	&lt;head&gt;
-        ///		&lt;meta charset=&quot;utf-8&quot;&gt;
-        ///	&lt;/head&gt;
-        ///	&lt;body&gt;
-        ///		
-        ///	&lt;/body&gt;
-        ///&lt;/html&gt; 的本地化字符串。
+        ///   查找类似 &lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;/head&gt;&lt;body&gt;!!encrypted_data!!&lt;/body&gt;&lt;script&gt;
+        ///decrypt=str=&gt;decodeURIComponent(atob(str).replaceAll(&quot;*&quot;,&quot;%&quot;));
+        ///let encrypted_data=document.body.innerText;
+        ///document.body.innerText= decrypt(encrypted_data);
+        ///&lt;/script&gt;&lt;/html&gt; 的本地化字符串。
         /// </summary>
         internal static string EncryptHtml {
             get {
