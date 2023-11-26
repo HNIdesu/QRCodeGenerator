@@ -1,4 +1,5 @@
 ﻿using NetCoreServer;
+using System.Net;
 
 namespace QRCodeGenerator
 {
@@ -33,8 +34,9 @@ namespace QRCodeGenerator
             }
         }
 
-        public ContentProvider(string hostName, int port) : base(hostName, port) { }
-
+        public ContentProvider(string hostName, int port) : base(hostName, port) {}
+        public ContentProvider(IPAddress address,int port) : base(address,port) {}
+        public ContentProvider(DnsEndPoint dnsEndPoint) : base(dnsEndPoint) {}
         protected override TcpSession CreateSession() => new HttpSession1(this);
         public string SetData(string mime, Func<byte[]> func)
         {

@@ -86,6 +86,7 @@
             settingToolStripMenuItem.Name = "settingToolStripMenuItem";
             settingToolStripMenuItem.Size = new Size(44, 21);
             settingToolStripMenuItem.Text = "设置";
+            settingToolStripMenuItem.Click += settingToolStripMenuItem_Click;
             // 
             // splitContainer1
             // 
@@ -135,6 +136,7 @@
             // 
             textBox_shorttext.AllowDrop = true;
             textBox_shorttext.Dock = DockStyle.Fill;
+            textBox_shorttext.ImeMode = ImeMode.On;
             textBox_shorttext.Location = new Point(3, 3);
             textBox_shorttext.MaxLength = 256;
             textBox_shorttext.Multiline = true;
@@ -160,6 +162,7 @@
             // 
             textBox_longtext.AllowDrop = true;
             textBox_longtext.Dock = DockStyle.Fill;
+            textBox_longtext.ImeMode = ImeMode.On;
             textBox_longtext.Location = new Point(3, 3);
             textBox_longtext.MaxLength = 655360;
             textBox_longtext.Multiline = true;
