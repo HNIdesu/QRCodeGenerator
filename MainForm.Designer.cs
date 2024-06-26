@@ -40,7 +40,7 @@
             textBox_longtext = new TextBox();
             tabPage_image = new TabPage();
             pictureBox_preview = new PictureBox();
-            tabPage_music = new TabPage();
+            tabPage_audio = new TabPage();
             tabPage_video = new TabPage();
             pictureBox_qrcode = new PictureBox();
             openFileDialog_pickimage = new OpenFileDialog();
@@ -111,7 +111,7 @@
             tabControl1.Controls.Add(tabPage_shorttext);
             tabControl1.Controls.Add(tabPage_longtext);
             tabControl1.Controls.Add(tabPage_image);
-            tabControl1.Controls.Add(tabPage_music);
+            tabControl1.Controls.Add(tabPage_audio);
             tabControl1.Controls.Add(tabPage_video);
             tabControl1.Dock = DockStyle.Fill;
             tabControl1.Location = new Point(0, 0);
@@ -200,15 +200,15 @@
             pictureBox_preview.DragEnter += control_DragEnter;
             pictureBox_preview.MouseClick += pictureBox_preview_MouseClick;
             // 
-            // tabPage_music
+            // tabPage_audio
             // 
-            tabPage_music.Location = new Point(4, 26);
-            tabPage_music.Name = "tabPage_music";
-            tabPage_music.Padding = new Padding(3);
-            tabPage_music.Size = new Size(503, 373);
-            tabPage_music.TabIndex = 3;
-            tabPage_music.Text = "音乐";
-            tabPage_music.UseVisualStyleBackColor = true;
+            tabPage_audio.Location = new Point(4, 26);
+            tabPage_audio.Name = "tabPage_audio";
+            tabPage_audio.Padding = new Padding(3);
+            tabPage_audio.Size = new Size(503, 373);
+            tabPage_audio.TabIndex = 3;
+            tabPage_audio.Text = "音频";
+            tabPage_audio.UseVisualStyleBackColor = true;
             // 
             // tabPage_video
             // 
@@ -284,7 +284,7 @@
         private TextBox textBox_longtext;
         private TabPage tabPage_image;
         private PictureBox pictureBox_preview;
-        private TabPage tabPage_music;
+        private TabPage tabPage_audio;
         private TabPage tabPage_video;
     }
 }
