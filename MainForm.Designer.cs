@@ -247,6 +247,7 @@
             MainMenuStrip = menuStrip1;
             Name = "MainForm";
             Text = "QRCode Generator";
+            Load += MainForm_Load;
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             menuStrip1.ResumeLayout(false);

@@ -135,13 +135,18 @@ namespace QRCodeGenerator
         private void settingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new SettingForm().ShowDialog();
-            if (_ContentProvider.Address!=ConfigUtil.Host || _ContentProvider.Port != ConfigUtil.Port)
+            if (_ContentProvider.Address != ConfigUtil.Host || _ContentProvider.Port != ConfigUtil.Port)
             {
                 _ContentProvider.DisconnectAll();
                 _ContentProvider.Dispose();
                 _ContentProvider = new ContentProvider(ConfigUtil.Host, ConfigUtil.Port);
                 _ContentProvider.Start();
             }
+
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
 
         }
     }

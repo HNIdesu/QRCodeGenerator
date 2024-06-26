@@ -2,13 +2,14 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NetCoreServer" Version="8.0.7" />
     <PackageReference Include="PCLWebUtility" Version="1.0.3" />
     <PackageReference Include="QRCoder" Version="1.4.3" />
   </ItemGroup>
@@ -16,9 +17,6 @@
   <ItemGroup>
     <Reference Include="ConfigManager">
       <HintPath>..\ConfigManager\ConfigManager\bin\Debug\net6.0\ConfigManager.dll</HintPath>
-    </Reference>
-    <Reference Include="NetCoreServer">
-      <HintPath>..\..\Fork\NetCoreServer\source\NetCoreServer\bin\Debug\net6.0\NetCoreServer.dll</HintPath>
     </Reference>
   </ItemGroup>
 
