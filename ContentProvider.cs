@@ -3,7 +3,7 @@ using System.Net;
 
 namespace QRCodeGenerator
 {
-    internal class ContentProvider:HttpServer
+    internal sealed class ContentProvider:HttpServer
     {
         private struct Item
         {
