@@ -7,30 +7,27 @@ namespace QRCodeGenerator
     public partial class MainForm : Form
     {
 
-        private ContentProvider _ContentProvider;
+        private ContentProvider mContentProvider;
 
         private static string GenerateValidUrl(string token)
         {
-            if (ConfigUtil.EnableNetTraverse)
-                return ConfigUtil.NetTraverseUrl + $"?token={token}";
+            if (AppConfig.EnableNetTraverse)
+                return AppConfig.NetTraverseUrl + $"?token={token}";
             else
-                return $"http://{ConfigUtil.Host}:{ConfigUtil.Port}/" + $"?token={token}";
+                return $"http://{AppConfig.Host}:{AppConfig.Port}/" + $"?token={token}";
         }
 
         public MainForm()
         {
             InitializeComponent();
             pictureBox_preview.AllowDrop = true;
-            _ContentProvider = new ContentProvider(ConfigUtil.Host, ConfigUtil.Port);
-            _ContentProvider.Start();
+            mContentProvider = new ContentProvider(AppConfig.Host, AppConfig.Port);
+            mContentProvider.Start();
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Image? qrcode = tabControl1.SelectedTab.Tag as Bitmap;
-            if (qrcode == null)
-                qrcode = Resources.preview;
-            pictureBox_qrcode.Image = qrcode;
+            pictureBox_qrcode.Image = (tabControl1.SelectedTab?.Tag as Bitmap)?? Resources.preview;
         }
 
         private void textBox_shorttext_TextChanged(object sender, EventArgs e)
@@ -42,7 +39,7 @@ namespace QRCodeGenerator
         private void textBox_longtext_TextChanged(object sender, EventArgs e)
         {
             string html = Resources.EncryptHtml.Replace("!!encrypted_data!!", EncryptUtil.EncryptText(textBox_longtext.Text));
-            string token = _ContentProvider.SetData("text/html", () => Encoding.ASCII.GetBytes(html));
+            string token = mContentProvider.SetData("text/html", () => Encoding.ASCII.GetBytes(html));
             pictureBox_qrcode.Image = QRCodeHelper.GetQRCode(GenerateValidUrl(token), 36, Color.Black, Color.White, QRCoder.QRCodeGenerator.ECCLevel.L, forceUtf8: true);
             tabPage_longtext.Tag = pictureBox_qrcode.Image;
         }
@@ -63,7 +60,7 @@ namespace QRCodeGenerator
                         string ext = Path.GetExtension(filepath).Remove(0, 1);
                         if (ext == "jpg")
                             ext = "jpeg";
-                        string token = _ContentProvider.SetData($"image/{ext}", () => File.ReadAllBytes(filepath));
+                        string token = mContentProvider.SetData($"image/{ext}", () => File.ReadAllBytes(filepath));
                         pictureBox_qrcode.Image = QRCodeHelper.GetQRCode(GenerateValidUrl(token), 36, Color.Black, Color.White, QRCoder.QRCodeGenerator.ECCLevel.L, forceUtf8: true);
                         tabPage_image.Tag = pictureBox_qrcode.Image;
                     }
@@ -101,11 +98,13 @@ namespace QRCodeGenerator
             e.Effect = DragDropEffects.Copy;
         }
 
+        private static readonly HashSet<string> mImageExtension = [".png", ".jpeg", ".jpg", ".webp", ".bmp"];
+
         private void pictureBox_preview_DragDrop(object sender, DragEventArgs e)
         {
             PictureBox pictureBox = (PictureBox)sender;
             string? filepath = (e.Data?.GetData("FileNameW") as string[])?[0];
-            if (filepath != null && (new string[] { ".png", "jpeg", ".jpg", ".webp", "bmp" }).Any(ext => filepath.EndsWith(ext)))
+            if (filepath != null && mImageExtension.Contains(Path.GetExtension(filepath).ToLower()))
             {
                 try
                 {
@@ -114,7 +113,7 @@ namespace QRCodeGenerator
                     string ext = Path.GetExtension(filepath).Remove(0, 1);
                     if (ext == "jpg")
                         ext = "jpeg";
-                    string token = _ContentProvider.SetData($"image/{ext}", () => File.ReadAllBytes(filepath));
+                    string token = mContentProvider.SetData($"image/{ext}", () => File.ReadAllBytes(filepath));
                     pictureBox_qrcode.Image = QRCodeHelper.GetQRCode(GenerateValidUrl(token), 36, Color.Black, Color.White, QRCoder.QRCodeGenerator.ECCLevel.L, forceUtf8: true);
                     tabPage_image.Tag = pictureBox_qrcode.Image;
                 }
@@ -135,18 +134,13 @@ namespace QRCodeGenerator
         private void settingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new SettingForm().ShowDialog();
-            if (_ContentProvider.Address != ConfigUtil.Host || _ContentProvider.Port != ConfigUtil.Port)
+            if (mContentProvider.Address != AppConfig.Host || mContentProvider.Port != AppConfig.Port)
             {
-                _ContentProvider.DisconnectAll();
-                _ContentProvider.Dispose();
-                _ContentProvider = new ContentProvider(ConfigUtil.Host, ConfigUtil.Port);
-                _ContentProvider.Start();
+                mContentProvider.DisconnectAll();
+                mContentProvider.Dispose();
+                mContentProvider = new ContentProvider(AppConfig.Host, AppConfig.Port);
+                mContentProvider.Start();
             }
-
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
 
         }
     }

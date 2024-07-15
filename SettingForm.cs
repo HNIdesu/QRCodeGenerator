@@ -5,10 +5,10 @@
         public SettingForm()
         {
             InitializeComponent();
-            textBox_hostname.Text = ConfigUtil.Host;
-            textBox_port.Text = ConfigUtil.Port.ToString();
-            checkBox_enableNetTraverse.Checked = ConfigUtil.EnableNetTraverse;
-            textBox_url.Text = ConfigUtil.NetTraverseUrl;
+            textBox_hostname.Text = AppConfig.Host;
+            textBox_port.Text = AppConfig.Port.ToString();
+            checkBox_enableNetTraverse.Checked = AppConfig.EnableNetTraverse;
+            textBox_url.Text = AppConfig.NetTraverseUrl;
         }
 
         private void button_cancel_Click(object sender, EventArgs e)
@@ -47,17 +47,17 @@
         {
             if (!CheckInput()) return;
             int port = int.Parse(textBox_port.Text.Trim());
-            if (ConfigUtil.Port != port)
-                ConfigUtil.Port = port;
+            if (AppConfig.Port != port)
+                AppConfig.Port = port;
             string host = textBox_hostname.Text.Trim();
-            if (host != ConfigUtil.Host)
-                ConfigUtil.Host = host;
-            if (ConfigUtil.EnableNetTraverse != checkBox_enableNetTraverse.Checked)
-                ConfigUtil.EnableNetTraverse = checkBox_enableNetTraverse.Checked;
+            if (host != AppConfig.Host)
+                AppConfig.Host = host;
+            if (AppConfig.EnableNetTraverse != checkBox_enableNetTraverse.Checked)
+                AppConfig.EnableNetTraverse = checkBox_enableNetTraverse.Checked;
             string url = textBox_url.Text.Trim();
             if (!url.Contains('?') && !url.EndsWith('/')) url += "/";
-            if (host != ConfigUtil.NetTraverseUrl)
-                ConfigUtil.NetTraverseUrl = url;
+            if (host != AppConfig.NetTraverseUrl)
+                AppConfig.NetTraverseUrl = url;
 
             Close();
         }
