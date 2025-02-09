@@ -6,9 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CefSharp.Common.NETCore" Version="132.3.11" />
+    <PackageReference Include="CefSharp.WinForms.NETCore" Version="132.3.11" />
     <PackageReference Include="NetCoreServer" Version="8.0.7" />
     <PackageReference Include="PCLWebUtility" Version="1.0.3" />
     <PackageReference Include="QRCoder" Version="1.4.3" />
